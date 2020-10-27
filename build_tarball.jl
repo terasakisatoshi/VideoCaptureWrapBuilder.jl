@@ -3,7 +3,7 @@
 using BinaryBuilder, Pkg
 
 name = "VideoCaptureWrap"
-version = v"0.1.2"
+version = v"0.1.3"
 
 # copy LICENSE file
 cp("LICENSE", joinpath("src", "LICENSE"), force=true)
