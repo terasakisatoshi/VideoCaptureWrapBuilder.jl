@@ -3,7 +3,7 @@
 using BinaryBuilder, Pkg
 
 name = "VideoCaptureWrap"
-version = v"0.1.4"
+version = v"0.1.7"
 
 # copy LICENSE file
 cp("LICENSE", joinpath("src", "LICENSE"), force=true)
@@ -50,7 +50,7 @@ products = [
 # Dependencies that must be installed before this package can be built
 dependencies = [
     Dependency("libcxxwrap_julia_jll"),
-    Dependency(PackageSpec(; name="OpenCV_jll", uuid="33b9d88c-85f9-5d73-bd91-4e2b95a9aa0b", url="https://github.com/terasakisatoshi/OpenCV_jll.jl", rev="OpenCV-v0.2.1+0")),
+    Dependency(PackageSpec(; name="OpenCV_jll", uuid="33b9d88c-85f9-5d73-bd91-4e2b95a9aa0b", url="https://github.com/terasakisatoshi/OpenCV_jll.jl", rev="OpenCV-v0.2.4+0")),
     BuildDependency(PackageSpec(name="Julia_jll", version=v"1.5.0+0"))
 ]
 
