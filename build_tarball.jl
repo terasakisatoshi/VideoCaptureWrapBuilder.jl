@@ -5,12 +5,12 @@ using BinaryBuilder, Pkg
 name = "VideoCaptureWrap"
 version = v"0.1.2"
 
+# copy LICENSE file
+cp("LICENSE", joinpath("src", "LICENSE"), force=true)
+
 # Collection of sources required to complete build
 sources = [
-    GitSource(
-      "https://github.com/terasakisatoshi/VideoCaptureWrap.jl.git",
-      "25f81ab46f10ac021ef53f4159601a8fd73c692a",
-    )
+    DirectorySource("src", target="projectname"),
 ]
 # Bash recipe for building across all platforms
 script = raw"""
@@ -26,10 +26,10 @@ cd build
 cmake -DJulia_PREFIX=$Julia_PREFIX -DCMAKE_FIND_ROOT_PATH=$prefix -DJlCxx_DIR=$prefix/lib/cmake/JlCxx \
       -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} \
       $macos_extra_flags -DCMAKE_BUILD_TYPE=Release \
-      ../VideoCaptureWrap.jl/
+      ../projectname/
 VERBOSE=ON cmake --build . --config Release --target install -- -j${nproc}
 cd ..
-install_license VideoCaptureWrap.jl/LICENSE
+install_license projectname/LICENSE
 """
 
 # These are the platforms we will build for by default, unless further
