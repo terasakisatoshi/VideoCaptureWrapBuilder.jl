@@ -3,7 +3,7 @@
 using BinaryBuilder, Pkg
 
 name = "VideoCaptureWrap"
-version = v"0.1.7"
+version = v"0.2.0"
 
 # copy LICENSE file
 cp("LICENSE", joinpath("src", "LICENSE"), force=true)
@@ -36,9 +36,9 @@ install_license projectname/LICENSE
 # platforms are passed in on the command line
 platforms = [
     #Linux(:armv7l; libc=:glibc, compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
-    Windows(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
+    #Windows(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
     Linux(:x86_64; libc=:glibc, compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
-    MacOS(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
+    #MacOS(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
 ]
 
 # The products that we will ensure are always built
@@ -50,7 +50,7 @@ products = [
 # Dependencies that must be installed before this package can be built
 dependencies = [
     Dependency("libcxxwrap_julia_jll"),
-    Dependency(PackageSpec(; name="OpenCV_jll", uuid="33b9d88c-85f9-5d73-bd91-4e2b95a9aa0b", url="https://github.com/terasakisatoshi/OpenCV_jll.jl", rev="OpenCV-v0.2.4+0")),
+    Dependency(PackageSpec(; name="OpenCV_jll", uuid="33b9d88c-85f9-5d73-bd91-4e2b95a9aa0b", url="https://github.com/terasakisatoshi/OpenCV_jll.jl", rev="OpenCV-v0.3.0+0")),
     BuildDependency(PackageSpec(name="Julia_jll", version=v"1.5.0+0"))
 ]
 
