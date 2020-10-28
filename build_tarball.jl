@@ -3,7 +3,7 @@
 using BinaryBuilder, Pkg
 
 name = "VideoCaptureWrap"
-version = v"0.3.0"
+version = v"0.3.1"
 
 # copy LICENSE file
 cp("LICENSE", joinpath("src", "LICENSE"), force=true)
@@ -36,9 +36,9 @@ install_license projectname/LICENSE
 # platforms are passed in on the command line
 platforms = [
     #Linux(:armv7l; libc=:glibc, compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
-    #Windows(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
+    Windows(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
     Linux(:x86_64; libc=:glibc, compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
-    #MacOS(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
+    MacOS(:x86_64; compiler_abi=CompilerABI(cxxstring_abi=:cxx11)),
 ]
 
 # The products that we will ensure are always built
