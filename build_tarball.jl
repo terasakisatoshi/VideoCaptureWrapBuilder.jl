@@ -3,7 +3,7 @@
 using BinaryBuilder, Pkg
 
 name = "VideoCaptureWrap"
-version = v"0.5.2"
+version = v"0.5.3"
 
 # copy LICENSE file
 cp("LICENSE", joinpath("src", "LICENSE"), force=true)
@@ -36,6 +36,7 @@ install_license projectname/LICENSE
 # platforms are passed in on the command line
 platforms = [
     Linux(:armv7l),
+    Linux(:aarch64; libc=:glibc),
     Windows(:x86_64),
     Linux(:x86_64),
     MacOS(:x86_64),
