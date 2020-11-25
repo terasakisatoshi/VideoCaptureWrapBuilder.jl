@@ -3,7 +3,7 @@
 using BinaryBuilder, Pkg
 
 name = "VideoCaptureWrap"
-version = v"0.5.3"
+version = v"0.6.0"
 
 # copy LICENSE file
 cp("LICENSE", joinpath("src", "LICENSE"), force=true)
@@ -36,9 +36,10 @@ install_license projectname/LICENSE
 # platforms are passed in on the command line
 platforms = [
     Linux(:armv7l),
-    Linux(:aarch64; libc=:glibc),
-    Windows(:x86_64),
+    Linux(:aarch64),
+    Linux(:i686),
     Linux(:x86_64),
+    Windows(:x86_64),
     MacOS(:x86_64),
 ] |> expand_cxxstring_abis
 
@@ -51,7 +52,7 @@ products = [
 # Dependencies that must be installed before this package can be built
 dependencies = [
     Dependency(PackageSpec(name="libcxxwrap_julia_jll", rev="libcxxwrap_julia-v0.8.4+0")),
-    Dependency(PackageSpec(; name="OpenCVQt_jll", uuid="2e4a2372-4a7c-5bb9-ae2d-b1938f154ce2", url="https://github.com/terasakisatoshi/OpenCVQt_jll.jl", rev="OpenCVQt-v0.5.0+0")),
+    Dependency(PackageSpec(; name="OpenCVQt_jll", uuid="2e4a2372-4a7c-5bb9-ae2d-b1938f154ce2", url="https://github.com/terasakisatoshi/OpenCVQt_jll.jl", rev="OpenCVQt-v0.6.0+0")),
     BuildDependency(PackageSpec(name="libjulia_jll", version=v"1.5.1")),
 ]
 
