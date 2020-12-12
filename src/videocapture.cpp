@@ -26,17 +26,20 @@ int capture_image(cv::VideoCapture &cap)
 }
 
 // Pass data from C++ to Julia
-void set_jlimage(jlcxx::ArrayRef<uint8_t> jlvec, cv::Mat& frame)
+void set_jlvec(jlcxx::ArrayRef<uint8_t> jlvec, cv::Mat& frame)
 {
-  cv::cvtColor(frame, frame, COLOR_BGR2RGB);
-  int H = frame.rows;
   int W = frame.cols;
+  int H = frame.rows;
+  int C = frame.channels();
+  if (C == 3){
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+  }
   int idx = 0;
   for (int j = 0; j < W; j++)
   {
     for (int i = 0; i < H; i++)
     {
-      for (int k = 0; k < 3; k++)
+      for (int k = 0; k < C; k++)
       {
         jlvec[idx] = frame.ptr<cv::Vec3b>(i)[j][k];
         idx++;
@@ -65,6 +68,25 @@ cv::Mat to_cvimage(jlcxx::ArrayRef<uint8_t> jlimg, int C, int H, int W)
   return frame;
 }
 
+std::vector<uint8_t> cvmat2stdvec(cv::Mat &frame)
+{
+  frame = frame.t();
+  int C = frame.channels();
+  if (C == 3){
+    cvtColor(frame, frame, COLOR_BGR2RGB);
+  }
+  std::vector<uchar> array;
+  if (frame.isContinuous()) {
+    // array.assign(frame.datastart, frame.dataend); // <- has problems for sub-matrix like frame = big_mat.row(i)
+    array.assign(frame.data, frame.data + frame.total()*frame.channels());
+  } else {
+    for (int i = 0; i < frame.rows; ++i) {
+      array.insert(array.end(), frame.ptr<uchar>(i), frame.ptr<uchar>(i)+frame.cols*frame.channels());
+    }
+  }
+  return array;
+}
+
 double get_capture_width(cv::VideoCapture &cap)
 {
   return cap.get(CAP_PROP_FRAME_WIDTH);
@@ -74,6 +96,22 @@ double get_capture_height(cv::VideoCapture &cap)
 {
   return cap.get(CAP_PROP_FRAME_HEIGHT);
 }
+
+double get_image_width(cv::Mat &m)
+{
+  return m.cols;
+}
+
+double get_image_height(cv::Mat &m)
+{
+  return m.rows;
+}
+
+double get_image_channels(cv::Mat &m)
+{
+  return m.channels();
+}
+
 
 JLCXX_MODULE
 define_videoio_module(Module &mod)
@@ -113,10 +151,15 @@ define_videoio_module(Module &mod)
   mod.method("imshow", [](const std::string &winname, const cv::Mat &mat) {
     return cv::imshow(winname, cv::InputArray(mat));
   });
-
+  mod.method("imread", [](const std::string &filename, int mode){return cv::imread(filename, mode);});
+  
   mod.method("capture_image", capture_image);
   mod.method("get_capture_width", get_capture_width);
   mod.method("get_capture_height", get_capture_height);
-  mod.method("set_jlimage!", set_jlimage);
+  mod.method("get_image_width", get_image_width);
+  mod.method("get_image_height", get_image_height);
+  mod.method("get_image_channels", get_image_channels);
+  mod.method("set_jlvec!", set_jlvec);
   mod.method("to_cvimage", to_cvimage);
+  mod.method("cvmat2stdvec", cvmat2stdvec);
 }
