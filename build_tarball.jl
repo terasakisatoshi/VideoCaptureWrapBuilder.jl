@@ -3,7 +3,7 @@
 using BinaryBuilder, Pkg
 
 name = "VideoCaptureWrap"
-version = v"0.6.0"
+version = v"0.7.1"
 
 # copy LICENSE file
 cp("LICENSE", joinpath("src", "LICENSE"), force=true)
@@ -35,12 +35,19 @@ install_license projectname/LICENSE
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
 platforms = [
-    Linux(:armv7l),
-    Linux(:aarch64),
-    Linux(:i686),
-    Linux(:x86_64),
-    Windows(:x86_64),
-    MacOS(:x86_64),
+   Linux(:i686, libc=:glibc),
+   Linux(:x86_64, libc=:glibc),
+   Linux(:aarch64, libc=:glibc),
+   Linux(:armv7l, libc=:glibc, call_abi=:eabihf),
+   #Linux(:powerpc64le, libc=:glibc), <- OpenCVQt_jll does not provide for this platform
+   #Linux(:i686, libc=:musl), <- OpenCV_jll does not provide for this platform
+   #Linux(:x86_64, libc=:musl), <- fails
+   Linux(:aarch64, libc=:musl),
+   Linux(:armv7l, libc=:musl, call_abi=:eabihf),
+   MacOS(:x86_64),
+   #FreeBSD(:x86_64), <- fails,
+   Windows(:i686),
+   Windows(:x86_64),
 ] |> expand_cxxstring_abis
 
 # The products that we will ensure are always built
@@ -51,8 +58,8 @@ products = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    Dependency(PackageSpec(name="libcxxwrap_julia_jll", rev="libcxxwrap_julia-v0.8.4+0")),
-    Dependency(PackageSpec(; name="OpenCVQt_jll", uuid="2e4a2372-4a7c-5bb9-ae2d-b1938f154ce2", url="https://github.com/terasakisatoshi/OpenCVQt_jll.jl", rev="OpenCVQt-v0.6.0+0")),
+    Dependency(PackageSpec(name="libcxxwrap_julia_jll", rev="libcxxwrap_julia-v0.8.5+0")),
+    Dependency(PackageSpec(; name="OpenCVQt_jll", uuid="2e4a2372-4a7c-5bb9-ae2d-b1938f154ce2", url="https://github.com/terasakisatoshi/OpenCVQt_jll.jl", rev="OpenCVQt-v0.7.1+0")),
     BuildDependency(PackageSpec(name="libjulia_jll", version=v"1.5.1")),
 ]
 
